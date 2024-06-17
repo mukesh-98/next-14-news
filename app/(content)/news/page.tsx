@@ -1,8 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
-import news from "../../../Sample_Report.json";
 import NewsCard from "@/components/news-card";
-export default function NewsList() {
+import { getAllNews } from "@/lib";
+export default async function NewsList() {
+  const news = getAllNews();
   return (
     <div className="z-10">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -18,8 +17,8 @@ export default function NewsList() {
             };
             return (
               <NewsCard
-                key={index}
-                index={index}
+                key={index + 1}
+                index={index + 1}
                 product={product}
               />
             );

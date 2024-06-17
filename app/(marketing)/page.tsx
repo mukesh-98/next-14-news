@@ -1,6 +1,8 @@
+import { initDb } from "@/lib";
 import Image from "next/image";
 
 export default function Home() {
+  initDb();
   return (
     <div className="relative isolate">
       <svg

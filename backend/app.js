@@ -71,9 +71,28 @@ const app = express();
 
 app.use(cors());
 
+const newsParser = ({ keywords, creator, country, category, ...news }) => {
+  return {
+    ...news,
+    keywords: JSON.parse(keywords),
+    creator: JSON.parse(creator),
+    country: JSON.parse(country),
+    category: JSON.parse(category),
+  };
+};
+
 app.get("/news", (req, res) => {
   const news = db.prepare("SELECT * FROM news").all();
-  res.json(news);
+  res.json(news.map((news) => newsParser(news)));
+});
+app.get("/news/:id", (req, res) => {
+  const { id } = req.params;
+  const news = db.prepare("SELECT * FROM news WHERE id = ?").get(id);
+  if (news) {
+    res.json(newsParser(news));
+  } else {
+    res.status(404).json({ error: "News not found" });
+  }
 });
 
 initDb();

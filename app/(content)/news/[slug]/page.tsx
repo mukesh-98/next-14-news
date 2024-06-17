@@ -1,19 +1,21 @@
+import { getNewsById } from "@/lib";
 import { StarIcon } from "@heroicons/react/20/solid";
 import Image from "next/image";
-import news from "../../../../Sample_Report.json";
 import Link from "next/link";
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Example({ params }: any) {
-  const newsId = params["slug"];
+export default async function Example({ params }: any) {
+  const newsId = Number(params["slug"]);
+  const newsFromServer = getNewsById(newsId);
   const product = {
-    ...news[newsId],
-    imageSrc: `https://picsum.photos/seed/${Number(newsId) + 1}/200/300`,
+    ...newsFromServer,
+    imageSrc: `https://picsum.photos/seed/${newsId}/200/300`,
     imageAlt: "News Image :https://picsum.photos/seed/200/300",
   };
+
   return (
     <div className="bg-transparent">
       <div className="mx-auto px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -94,7 +96,7 @@ export default function Example({ params }: any) {
             <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
             <div className="prose prose-sm mt-4 text-gray-500">
               <ul role="list">
-                {product.category.map((highlight) => (
+                {product?.category?.map((highlight: string) => (
                   <li key={highlight}>{highlight}</li>
                 ))}
               </ul>
